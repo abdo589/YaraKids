@@ -75,5 +75,5 @@
     }));
   }
 
-  window.YK = {render, SOCIAL, PAY};
+  window.YK = {render, SOCIAL, PAY, asset: u => u || ''};
 })();

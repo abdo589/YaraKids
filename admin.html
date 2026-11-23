@@ -7,7 +7,7 @@
 <title>تعديل صفحة Yara Kids</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 <style>
 :root{--ink:#2a1840;--mute:#6f6182;--line:#e6dcf3;--soft:#f6f0fd;--acc:#6c2bd9;--ok:#1f9d55;--bad:#d0342c}
 *{box-sizing:border-box;min-width:0}
@@ -57,21 +57,15 @@ button:focus-visible,a:focus-visible,.file:focus-within{outline:3px solid #ffd23
 <div class="top"><b>تعديل صفحة Yara Kids</b><a href="./" target="_blank" rel="noopener">افتح الصفحة</a><button id="logout" type="button" hidden>خروج</button></div>
 
 <section class="setup" id="setup" hidden>
-  <div class="card">
-    <h3>أول مرة بس: اربط لوحة التعديل بـ GitHub</h3>
-    <ol>
-      <li>افتح <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">صفحة عمل Token جديد</a> (Fine-grained).</li>
-      <li><b>Token name:</b> اكتب <code>yara-kids-admin</code>، و<b>Expiration</b> اختار المدة اللي تناسبك.</li>
-      <li><b>Repository access:</b> اختار <b>Only select repositories</b> ثم <code>YaraKids</code>.</li>
-      <li><b>Permissions → Repository permissions → Contents:</b> اختار <b>Read and write</b>.</li>
-      <li>دوس <b>Generate token</b> وانسخ الكود اللي بيبدأ بـ <code>github_pat_</code> والصقه هنا.</li>
-    </ol>
-    <label for="tok">الـ Token</label>
-    <input id="tok" dir="ltr" autocomplete="off" placeholder="github_pat_...">
-    <p class="hint">الـ Token بيتحفظ على الجهاز ده بس، ومحدش بيشوفه. ماتبعتهوش لحد.</p>
+  <form class="card" id="loginForm">
+    <h3>تسجيل الدخول</h3>
+    <label for="user">اسم المستخدم</label>
+    <input id="user" dir="ltr" autocomplete="username" autocapitalize="none" value="admin">
+    <label for="pass">كلمة السر</label>
+    <input id="pass" type="password" dir="ltr" autocomplete="current-password">
     <p class="err" id="tokErr"></p>
-    <button class="primaryBtn" id="tokSave" type="button">ادخل</button>
-  </div>
+    <button class="primaryBtn" id="tokSave" type="submit">ادخل</button>
+  </form>
 </section>
 
 <div class="layout" id="editor" hidden>
@@ -100,54 +94,51 @@ button:focus-visible,a:focus-visible,.file:focus-within{outline:3px solid #ffd23
       <div id="payList"></div>
       <button class="add" id="addPay" type="button">+ ضيف طريقة دفع</button>
     </div>
+
+    <form class="card" id="pwForm">
+      <h3>تغيير كلمة السر</h3>
+      <label for="pw1">كلمة السر الجديدة (10 حروف أو أكتر)</label>
+      <input id="pw1" type="password" dir="ltr" autocomplete="new-password">
+      <label for="pw2">اكتبها تاني</label>
+      <input id="pw2" type="password" dir="ltr" autocomplete="new-password">
+      <p id="pwMsg" class="hint"></p>
+      <button class="primaryBtn" type="submit">غيّر كلمة السر</button>
+    </form>
   </div>
   <aside class="pv"><h4>معاينة مباشرة</h4><div class="phone"><div class="yk" id="preview"></div></div></aside>
 </div>
 
 <div class="save" id="saveBar" hidden><button id="saveBtn" type="button">حفظ ونشر</button><span id="status"></span></div>
 
-<script src="render.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=3"></script>
+<script src="render.js?v=3"></script>
 <script>
 {
-const OWNER = 'abdo589', REPO = 'YaraKids', BRANCH = 'main';
-const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+const sb = supabase.createClient(YK_CONFIG.url, YK_CONFIG.key);
+const toEmail = u => { u = u.trim().toLowerCase(); return u.includes('@') ? u : u + '@yarakids.app'; };
 const $ = id => document.getElementById(id);
-let token = ''; try { token = localStorage.getItem('yk_token') || ''; } catch (e) {}
-let data = null, dataSha = null, pendingLogo = null, dirty = false;
-
-const gh = async (path, opts = {}) => {
-  const r = await fetch(API + path + (opts.method ? '' : `?ref=${BRANCH}&t=${Date.now()}`), {
-    ...opts, cache: 'no-store',
-    headers: {Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {})}
-  });
-  if (!r.ok) { const e = new Error(r.status); e.status = r.status; throw e; }
-  return r.json();
-};
-const b64ToText = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g, '')), c => c.charCodeAt(0)));
-const textToB64 = s => { const u = new TextEncoder().encode(s); let bin = ''; for (let i = 0; i < u.length; i += 8192) bin += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(bin); };
+let data = null, pendingLogo = null, pendingBlob = null, dirty = false;
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 const status = (t, cls = '') => { $('status').textContent = t; $('status').className = cls; };
 
 function showSetup(msg) { $('setup').hidden = false; $('editor').hidden = true; $('saveBar').hidden = true; $('logout').hidden = true; $('tokErr').textContent = msg || ''; }
 async function load() {
-  try {
-    const f = await gh('data.json');
-    data = JSON.parse(b64ToText(f.content)); dataSha = f.sha;
-    data.social = data.social || []; data.payments = data.payments || [];
-    $('setup').hidden = true; $('editor').hidden = false; $('saveBar').hidden = false; $('logout').hidden = false;
-    fill();
-  } catch (e) {
-    showSetup(e.status === 401 || e.status === 403 || e.status === 404 ? 'الـ Token مش شغال أو ملوش صلاحية على YaraKids. اتأكد من الخطوات وجرب تاني.' : 'مفيش اتصال، جرب تاني.');
-  }
+  const {data: row, error} = await sb.from('site').select('data').eq('id', 1).single();
+  if (error) { showSetup('مقدرتش أحمّل البيانات، جرب تاني.'); return; }
+  data = row.data; data.social = data.social || []; data.payments = data.payments || [];
+  $('setup').hidden = true; $('editor').hidden = false; $('saveBar').hidden = false; $('logout').hidden = false;
+  fill();
 }
 
 const opts = (map, cur) => Object.entries(map).map(([k, v]) => `<option value="${k}"${k === cur ? ' selected' : ''}>${v.label}</option>`).join('');
 const ctrl = (list, i) => `<button class="mini" type="button" data-mv="${list}:${i}:-1" aria-label="لفوق" ${i === 0 ? 'disabled' : ''}>↑</button><button class="mini" type="button" data-mv="${list}:${i}:1" aria-label="لتحت" ${i === data[list].length - 1 ? 'disabled' : ''}>↓</button><button class="mini del" type="button" data-del="${list}:${i}" aria-label="امسح">✕</button>`;
+const logoSrc = () => pendingLogo || YK.asset(data.logo);
 
 function fill() {
   document.querySelectorAll('[data-k]').forEach(el => el.value = data[el.dataset.k] || '');
-  $('logoImg').src = pendingLogo || data.logo || '';
-  $('logoImg').style.visibility = (pendingLogo || data.logo) ? 'visible' : 'hidden';
+  $('logoImg').src = logoSrc() || '';
+  $('logoImg').style.visibility = logoSrc() ? 'visible' : 'hidden';
   $('socialList').innerHTML = data.social.map((s, i) => `<div class="item"><div class="ihead"><strong>${i + 1}. ${esc(s.title || YK.SOCIAL[s.type]?.label || 'لينك')}</strong>${ctrl('social', i)}</div>
     <div class="two"><div><label>النوع</label><select data-l="social" data-i="${i}" data-f="type">${opts(YK.SOCIAL, s.type)}</select></div>
     <div><label>الاسم اللي يظهر</label><input data-l="social" data-i="${i}" data-f="title" value="${esc(s.title)}"></div></div>
@@ -161,7 +152,7 @@ function fill() {
     <label>سطر صغير تحت الاسم (اختياري)</label><input data-l="payments" data-i="${i}" data-f="note" value="${esc(p.note)}" placeholder="حوّل على الرقم ده"></div>`).join('') || '<p class="hint">مفيش طرق دفع. دوس "ضيف طريقة دفع".</p>';
   preview();
 }
-function preview() { YK.render({...data, logo: pendingLogo || data.logo}, $('preview')); }
+function preview() { YK.render({...data, logo: logoSrc()}, $('preview')); }
 function changed() { dirty = true; status('فيه تعديلات لسه ما اتحفظتش'); preview(); }
 
 document.addEventListener('input', e => {
@@ -177,22 +168,24 @@ document.addEventListener('change', e => {
     it.type = el.value; fill(); changed();
   }
 });
+function confirmDel(it) { try { return confirm('تمسح "' + (it.title || 'العنصر ده') + '"؟'); } catch (e) { return true; } }
 document.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.mv) { const [l, i, d] = b.dataset.mv.split(':'); const a = data[l], j = +i + +d; [a[+i], a[j]] = [a[j], a[+i]]; fill(); changed(); }
-  if (b.dataset.del) { const [l, i] = b.dataset.del.split(':'); const it = data[l][+i]; if (confirmDel(it)) { data[l].splice(+i, 1); fill(); changed(); } }
+  if (b.dataset.del) { const [l, i] = b.dataset.del.split(':'); if (confirmDel(data[l][+i])) { data[l].splice(+i, 1); fill(); changed(); } }
 });
-function confirmDel(it) { try { return confirm('تمسح "' + (it.title || 'العنصر ده') + '"؟'); } catch (e) { return true; } }
 $('addSocial').onclick = () => { data.social.push({type: 'instagram', title: 'إنستجرام', url: '', sub: ''}); fill(); changed(); };
 $('addPay').onclick = () => { data.payments.push({type: 'vodafone', title: 'فودافون كاش', number: '', link: ''}); fill(); changed(); };
-$('logoDel').onclick = () => { data.logo = ''; pendingLogo = null; fill(); changed(); };
+$('logoDel').onclick = () => { data.logo = ''; pendingLogo = pendingBlob = null; fill(); changed(); };
 $('logoFile').onchange = e => {
   const file = e.target.files[0]; if (!file) return;
   const img = new Image(); img.onload = () => {
     const S = 400, c = document.createElement('canvas'); c.width = c.height = S;
     const m = Math.min(img.width, img.height);
     c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, S, S);
-    pendingLogo = c.toDataURL('image/jpeg', .86); URL.revokeObjectURL(img.src); fill(); changed();
+    pendingLogo = c.toDataURL('image/jpeg', .86);
+    c.toBlob(b => { pendingBlob = b; }, 'image/jpeg', .86);
+    URL.revokeObjectURL(img.src); fill(); changed();
   };
   img.src = URL.createObjectURL(file);
 };
@@ -200,27 +193,47 @@ $('logoFile').onchange = e => {
 $('saveBtn').onclick = async () => {
   $('saveBtn').disabled = true; status('جاري الحفظ…');
   try {
-    if (pendingLogo) {
-      let sha; try { sha = (await gh('logo.jpg')).sha; } catch (e) {}
-      await gh('logo.jpg', {method: 'PUT', body: JSON.stringify({message: 'Update logo from admin', content: pendingLogo.split(',')[1], branch: BRANCH, ...(sha ? {sha} : {})})});
-      data.logo = 'logo.jpg?v=' + Date.now(); pendingLogo = null;
+    if (pendingBlob) {
+      const path = 'logo-' + Date.now() + '.jpg';
+      const {error} = await sb.storage.from('assets').upload(path, pendingBlob, {contentType: 'image/jpeg', upsert: true});
+      if (error) throw error;
+      data.logo = sb.storage.from('assets').getPublicUrl(path).data.publicUrl; pendingLogo = pendingBlob = null;
     }
     const clean = JSON.parse(JSON.stringify(data));
     clean.social = clean.social.filter(s => (s.url || '').trim());
     clean.payments = clean.payments.filter(p => (p.number || '').trim() || (p.link || '').trim());
-    const r = await gh('data.json', {method: 'PUT', body: JSON.stringify({message: 'Update page data from admin', content: textToB64(JSON.stringify(clean, null, 2) + '\n'), sha: dataSha, branch: BRANCH})});
-    dataSha = r.content.sha; data = clean; dirty = false; fill();
-    status('اتحفظ ✓ هيظهر على الصفحة خلال دقيقة أو اتنين', 'ok');
+    const {data: rows, error} = await sb.from('site').update({data: clean}).eq('id', 1).select('id');
+    if (error) throw error;
+    if (!rows || !rows.length) throw {code: 'denied'};
+    data = clean; dirty = false; fill();
+    status('اتحفظ ✓ وظهر على الصفحة', 'ok');
   } catch (e) {
-    status(e.status === 409 ? 'فيه تعديل تاني اتحفظ قبلك. اعمل refresh وجرب تاني.' : e.status === 401 || e.status === 403 ? 'الـ Token انتهى أو ملوش صلاحية. اخرج وادخل بـ Token جديد.' : 'الحفظ ما نجحش، جرب تاني.', 'bad');
+    const expired = e && (e.code === 'denied' || /jwt|auth/i.test(e.message || ''));
+    status(expired ? 'انتهت الجلسة. اخرج وادخل تاني.' : 'الحفظ ما نجحش، جرب تاني.', 'bad');
   }
   $('saveBtn').disabled = false;
 };
-$('tokSave').onclick = () => { token = $('tok').value.trim(); if (!token) return; try { localStorage.setItem('yk_token', token); } catch (e) {} load(); };
-$('logout').onclick = () => { try { localStorage.removeItem('yk_token'); } catch (e) {} token = ''; showSetup(); };
+
+$('loginForm').onsubmit = async e => {
+  e.preventDefault(); $('tokErr').textContent = ''; $('tokSave').disabled = true;
+  const {error} = await sb.auth.signInWithPassword({email: toEmail($('user').value), password: $('pass').value});
+  $('tokSave').disabled = false;
+  if (error) { $('tokErr').textContent = 'اسم المستخدم أو كلمة السر غلط.'; return; }
+  $('pass').value = ''; load();
+};
+$('pwForm').onsubmit = async e => {
+  e.preventDefault();
+  const a = $('pw1').value, b = $('pw2').value, m = $('pwMsg');
+  if (a.length < 10) { m.textContent = 'لازم تبقى 10 حروف أو أكتر.'; m.className = 'err'; return; }
+  if (a !== b) { m.textContent = 'الاتنين مش زي بعض.'; m.className = 'err'; return; }
+  const {error} = await sb.auth.updateUser({password: a});
+  if (error) { m.textContent = 'ما اتغيرتش، جرب تاني.'; m.className = 'err'; return; }
+  $('pw1').value = $('pw2').value = ''; m.textContent = 'اتغيرت ✓'; m.className = 'hint';
+};
+$('logout').onclick = async () => { await sb.auth.signOut(); showSetup(); };
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
-if (token) load(); else showSetup();
+sb.auth.getSession().then(({data: {session}}) => session ? load() : showSetup());
 }
 </script>
 </body>
