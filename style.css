@@ -1,0 +1,44 @@
+/* Yara Kids page styles, shared by index.html and the admin preview */
+.yk{--bg:#2a1840;--bg2:#21122f;--mute:rgba(255,255,255,.72);--glass:rgba(255,255,255,.07);--line:rgba(255,255,255,.13);
+--y:#ffd23f;--g:#3ecf4a;--b:#2f8cff;--p:#ff3d9a;
+position:relative;overflow:hidden;color:#fff;font:16px/1.55 "Baloo Bhaijaan 2",system-ui,sans-serif;
+background:radial-gradient(120% 60% at 50% 0%,#3b2158 0%,var(--bg) 55%,var(--bg2) 100%)}
+.yk *{box-sizing:border-box;min-width:0}
+.yk .conf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.yk .wrap{position:relative;max-width:440px;margin:0 auto;padding:40px 18px 32px}
+.yk header{text-align:center}
+.yk .logo{display:block;width:104px;height:104px;border-radius:30px;object-fit:cover;margin:0 auto 16px;border:3px solid var(--y);box-shadow:0 14px 34px rgba(0,0,0,.4);background:#fff}
+.yk .mark{direction:ltr;font-size:clamp(40px,12vw,58px);font-weight:800;line-height:1.05;letter-spacing:1px;margin:0;overflow-wrap:anywhere}
+.yk .mark span:nth-child(4n+1){color:var(--g)}.yk .mark span:nth-child(4n+2){color:var(--b)}
+.yk .mark span:nth-child(4n+3){color:var(--p)}.yk .mark span:nth-child(4n){color:var(--y)}
+.yk .mark i{display:inline-block;width:.28em}
+.yk .tag{margin:10px 0 0;color:var(--mute);font-size:17px}
+.yk h2{font-size:15px;font-weight:700;color:var(--y);margin:30px 6px 10px;display:flex;align-items:center;gap:10px}
+.yk h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.yk .btn{display:flex;align-items:center;gap:14px;min-height:64px;padding:10px 14px;border-radius:20px;background:var(--glass);border:1px solid var(--line);color:#fff;text-decoration:none;font-weight:700;font-size:18px;transition:transform .15s,background .15s}
+.yk .btn+.btn{margin-top:10px}
+.yk .btn:hover{background:rgba(255,255,255,.11)}
+.yk .btn:active{transform:scale(.98)}
+.yk .btn small{display:block;font-weight:500;font-size:13px;color:var(--mute);unicode-bidi:plaintext;text-align:right}
+.yk .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;color:#fff}
+.yk .ic svg{width:23px;height:23px}
+.yk .go{margin-inline-start:auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--y);flex:none}
+.yk .pay{background:#fff;color:#2a1840;border-radius:24px;padding:16px;position:relative;overflow:hidden;box-shadow:0 16px 36px rgba(0,0,0,.3)}
+.yk .pay+.pay{margin-top:12px}
+.yk .pay::before{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:var(--dot);opacity:.12}
+.yk .row{display:flex;align-items:center;gap:12px}
+.yk .lbl{font-weight:800;font-size:18px;line-height:1.2}
+.yk .small{font-size:13px;color:#76668a}
+.yk .num{direction:ltr;text-align:center;font-size:clamp(22px,8vw,30px);font-weight:800;letter-spacing:2px;margin:12px 0;white-space:nowrap}
+.yk .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+.yk .num+.acts{margin-top:0}
+.yk .acts>*{min-height:48px;border-radius:14px;border:0;font:700 16px "Baloo Bhaijaan 2",sans-serif;cursor:pointer;display:grid;place-items:center;text-decoration:none;padding:0 10px}
+.yk .primary{background:#2a1840;color:#fff}
+.yk .ghost{background:#f2e9fc;color:#2a1840}
+.yk .btn:focus-visible,.yk .acts>*:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.yk footer{text-align:center;color:var(--mute);font-size:13px;margin-top:28px}
+.yk .toast{position:fixed;z-index:50;bottom:24px;left:50%;transform:translate(-50%,40px);opacity:0;background:var(--y);color:#2a1840;padding:10px 20px;border-radius:999px;font-weight:800;transition:.25s;pointer-events:none;white-space:nowrap}
+.yk .toast.on{opacity:1;transform:translate(-50%,0)}
+.yk header{animation:ykpop .6s ease-out both}
+@keyframes ykpop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.yk *{transition:none!important;animation:none!important}}

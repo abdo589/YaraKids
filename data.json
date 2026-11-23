@@ -1,0 +1,18 @@
+{
+  "name": "Yara Kids",
+  "tagline": "تابعنا وادفع بسهولة من مكان واحد",
+  "logo": "logo.jpg",
+  "socialTitle": "تابعنا",
+  "paymentTitle": "الدفع والتحويل",
+  "footer": "Yara Kids · شكراً إنك اخترتنا",
+  "social": [
+    {"type": "instagram", "title": "إنستجرام", "sub": "@yara_kids_111", "url": "https://www.instagram.com/yara_kids_111"},
+    {"type": "facebook", "title": "فيسبوك", "sub": "صفحتنا على فيسبوك", "url": "https://www.facebook.com/share/1bGoCmXzb1/"},
+    {"type": "tiktok", "title": "تيك توك", "sub": "@yarakids5", "url": "https://www.tiktok.com/@yarakids5"}
+  ],
+  "payments": [
+    {"type": "instapay", "title": "إنستاباي InstaPay", "number": "01004418864", "link": ""},
+    {"type": "vodafone", "title": "فودافون كاش 1", "number": "01006942758", "link": ""},
+    {"type": "vodafone", "title": "فودافون كاش 2", "number": "01004418864", "link": ""}
+  ]
+}

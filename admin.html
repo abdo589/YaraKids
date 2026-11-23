@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>تعديل صفحة Yara Kids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=2">
+<style>
+:root{--ink:#2a1840;--mute:#6f6182;--line:#e6dcf3;--soft:#f6f0fd;--acc:#6c2bd9;--ok:#1f9d55;--bad:#d0342c}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:#fbf8ff;color:var(--ink);font:16px/1.5 "Baloo Bhaijaan 2",system-ui,sans-serif}
+.top{position:sticky;top:0;z-index:20;background:#2a1840;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.top b{font-size:18px;margin-inline-end:auto}
+.top a,.top button{color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:10px;padding:8px 12px;font:600 14px inherit;font-family:inherit;text-decoration:none;cursor:pointer;min-height:40px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;max-width:1100px;margin:0 auto;padding:16px 16px 120px}
+@media(min-width:900px){.layout{grid-template-columns:minmax(0,1fr) 400px}.pv{position:sticky;top:76px;align-self:start}}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+.card h3{margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:8px}
+label{display:block;font-size:14px;font-weight:700;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;font:16px "Baloo Bhaijaan 2",system-ui,sans-serif;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);min-height:46px}
+input:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(108,43,217,.15)}
+input[dir=ltr]{text-align:left}
+.item{border:1.5px solid var(--line);border-radius:16px;padding:12px;background:var(--soft)}
+.item+.item{margin-top:10px}
+.ihead{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.ihead strong{margin-inline-end:auto;font-size:15px}
+.mini{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:18px;color:var(--ink);display:grid;place-items:center}
+.mini.del{color:var(--bad)}
+.mini:disabled{opacity:.35;cursor:default}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 10px}
+@media(max-width:520px){.two{grid-template-columns:minmax(0,1fr)}}
+.add{width:100%;margin-top:12px;min-height:48px;border:2px dashed #c9b5ea;background:#fff;border-radius:14px;color:var(--acc);font:700 16px "Baloo Bhaijaan 2",sans-serif;cursor:pointer}
+.logoRow{display:flex;align-items:center;gap:14px}
+.logoRow img{width:72px;height:72px;border-radius:18px;object-fit:cover;border:2px solid var(--line);background:#fff}
+.file{display:inline-grid;place-items:center;min-height:44px;padding:0 14px;border-radius:12px;background:var(--soft);border:1px solid var(--line);cursor:pointer;font-weight:700}
+.file input{display:none}
+.save{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap}
+.save button{min-height:52px;padding:0 34px;border:0;border-radius:14px;background:var(--acc);color:#fff;font:800 18px "Baloo Bhaijaan 2",sans-serif;cursor:pointer}
+.save button:disabled{opacity:.5}
+#status{font-weight:700;font-size:15px}
+#status.ok{color:var(--ok)}#status.bad{color:var(--bad)}
+.pv .phone{border-radius:28px;overflow:hidden;border:8px solid #1b1027;box-shadow:0 20px 40px rgba(42,24,64,.25);max-height:760px;overflow-y:auto}
+.pv h4{margin:0 0 8px;color:var(--mute);font-size:14px}
+.setup{max-width:560px;margin:30px auto;padding:0 16px}
+.setup ol{padding-inline-start:20px;line-height:1.9}
+.setup code{background:var(--soft);padding:1px 6px;border-radius:6px;direction:ltr;display:inline-block}
+.primaryBtn{min-height:50px;width:100%;margin-top:14px;border:0;border-radius:14px;background:var(--acc);color:#fff;font:800 17px "Baloo Bhaijaan 2",sans-serif;cursor:pointer}
+.hint{font-size:13px;color:var(--mute);margin:4px 0 0}
+.err{color:var(--bad);font-weight:700}
+button:focus-visible,a:focus-visible,.file:focus-within{outline:3px solid #ffd23f;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="top"><b>تعديل صفحة Yara Kids</b><a href="./" target="_blank" rel="noopener">افتح الصفحة</a><button id="logout" type="button" hidden>خروج</button></div>
+
+<section class="setup" id="setup" hidden>
+  <div class="card">
+    <h3>أول مرة بس: اربط لوحة التعديل بـ GitHub</h3>
+    <ol>
+      <li>افتح <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">صفحة عمل Token جديد</a> (Fine-grained).</li>
+      <li><b>Token name:</b> اكتب <code>yara-kids-admin</code>، و<b>Expiration</b> اختار المدة اللي تناسبك.</li>
+      <li><b>Repository access:</b> اختار <b>Only select repositories</b> ثم <code>YaraKids</code>.</li>
+      <li><b>Permissions → Repository permissions → Contents:</b> اختار <b>Read and write</b>.</li>
+      <li>دوس <b>Generate token</b> وانسخ الكود اللي بيبدأ بـ <code>github_pat_</code> والصقه هنا.</li>
+    </ol>
+    <label for="tok">الـ Token</label>
+    <input id="tok" dir="ltr" autocomplete="off" placeholder="github_pat_...">
+    <p class="hint">الـ Token بيتحفظ على الجهاز ده بس، ومحدش بيشوفه. ماتبعتهوش لحد.</p>
+    <p class="err" id="tokErr"></p>
+    <button class="primaryBtn" id="tokSave" type="button">ادخل</button>
+  </div>
+</section>
+
+<div class="layout" id="editor" hidden>
+  <div>
+    <div class="card">
+      <h3>البيانات الأساسية</h3>
+      <label>اللوجو</label>
+      <div class="logoRow"><img id="logoImg" alt="اللوجو"><label class="file" tabindex="0">غيّر اللوجو<input type="file" id="logoFile" accept="image/*"></label><button class="mini del" id="logoDel" type="button" title="شيل اللوجو" aria-label="شيل اللوجو">✕</button></div>
+      <label for="f-name">اسم المحل</label><input id="f-name" data-k="name">
+      <label for="f-tagline">الجملة اللي تحت الاسم</label><input id="f-tagline" data-k="tagline">
+      <div class="two">
+        <div><label for="f-st">عنوان قسم السوشيال</label><input id="f-st" data-k="socialTitle"></div>
+        <div><label for="f-pt">عنوان قسم الدفع</label><input id="f-pt" data-k="paymentTitle"></div>
+      </div>
+      <label for="f-footer">السطر اللي في الآخر</label><input id="f-footer" data-k="footer">
+    </div>
+
+    <div class="card">
+      <h3>السوشيال واللينكات</h3>
+      <div id="socialList"></div>
+      <button class="add" id="addSocial" type="button">+ ضيف لينك</button>
+    </div>
+
+    <div class="card">
+      <h3>طرق الدفع</h3>
+      <div id="payList"></div>
+      <button class="add" id="addPay" type="button">+ ضيف طريقة دفع</button>
+    </div>
+  </div>
+  <aside class="pv"><h4>معاينة مباشرة</h4><div class="phone"><div class="yk" id="preview"></div></div></aside>
+</div>
+
+<div class="save" id="saveBar" hidden><button id="saveBtn" type="button">حفظ ونشر</button><span id="status"></span></div>
+
+<script src="render.js?v=2"></script>
+<script>
+{
+const OWNER = 'abdo589', REPO = 'YaraKids', BRANCH = 'main';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+const $ = id => document.getElementById(id);
+let token = ''; try { token = localStorage.getItem('yk_token') || ''; } catch (e) {}
+let data = null, dataSha = null, pendingLogo = null, dirty = false;
+
+const gh = async (path, opts = {}) => {
+  const r = await fetch(API + path + (opts.method ? '' : `?ref=${BRANCH}&t=${Date.now()}`), {
+    ...opts, cache: 'no-store',
+    headers: {Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {})}
+  });
+  if (!r.ok) { const e = new Error(r.status); e.status = r.status; throw e; }
+  return r.json();
+};
+const b64ToText = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g, '')), c => c.charCodeAt(0)));
+const textToB64 = s => { const u = new TextEncoder().encode(s); let bin = ''; for (let i = 0; i < u.length; i += 8192) bin += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(bin); };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const status = (t, cls = '') => { $('status').textContent = t; $('status').className = cls; };
+
+function showSetup(msg) { $('setup').hidden = false; $('editor').hidden = true; $('saveBar').hidden = true; $('logout').hidden = true; $('tokErr').textContent = msg || ''; }
+async function load() {
+  try {
+    const f = await gh('data.json');
+    data = JSON.parse(b64ToText(f.content)); dataSha = f.sha;
+    data.social = data.social || []; data.payments = data.payments || [];
+    $('setup').hidden = true; $('editor').hidden = false; $('saveBar').hidden = false; $('logout').hidden = false;
+    fill();
+  } catch (e) {
+    showSetup(e.status === 401 || e.status === 403 || e.status === 404 ? 'الـ Token مش شغال أو ملوش صلاحية على YaraKids. اتأكد من الخطوات وجرب تاني.' : 'مفيش اتصال، جرب تاني.');
+  }
+}
+
+const opts = (map, cur) => Object.entries(map).map(([k, v]) => `<option value="${k}"${k === cur ? ' selected' : ''}>${v.label}</option>`).join('');
+const ctrl = (list, i) => `<button class="mini" type="button" data-mv="${list}:${i}:-1" aria-label="لفوق" ${i === 0 ? 'disabled' : ''}>↑</button><button class="mini" type="button" data-mv="${list}:${i}:1" aria-label="لتحت" ${i === data[list].length - 1 ? 'disabled' : ''}>↓</button><button class="mini del" type="button" data-del="${list}:${i}" aria-label="امسح">✕</button>`;
+
+function fill() {
+  document.querySelectorAll('[data-k]').forEach(el => el.value = data[el.dataset.k] || '');
+  $('logoImg').src = pendingLogo || data.logo || '';
+  $('logoImg').style.visibility = (pendingLogo || data.logo) ? 'visible' : 'hidden';
+  $('socialList').innerHTML = data.social.map((s, i) => `<div class="item"><div class="ihead"><strong>${i + 1}. ${esc(s.title || YK.SOCIAL[s.type]?.label || 'لينك')}</strong>${ctrl('social', i)}</div>
+    <div class="two"><div><label>النوع</label><select data-l="social" data-i="${i}" data-f="type">${opts(YK.SOCIAL, s.type)}</select></div>
+    <div><label>الاسم اللي يظهر</label><input data-l="social" data-i="${i}" data-f="title" value="${esc(s.title)}"></div></div>
+    <label>${s.type === 'phone' ? 'رقم التليفون' : 'اللينك'}</label><input dir="ltr" data-l="social" data-i="${i}" data-f="url" value="${esc(s.url)}" placeholder="${s.type === 'phone' ? '01xxxxxxxxx' : 'https://...'}">
+    <label>سطر صغير تحت الاسم (اختياري)</label><input data-l="social" data-i="${i}" data-f="sub" value="${esc(s.sub)}" placeholder="مثلاً @yara_kids"></div>`).join('') || '<p class="hint">مفيش لينكات. دوس "ضيف لينك".</p>';
+  $('payList').innerHTML = data.payments.map((p, i) => `<div class="item"><div class="ihead"><strong>${i + 1}. ${esc(p.title || YK.PAY[p.type]?.label || 'دفع')}</strong>${ctrl('payments', i)}</div>
+    <div class="two"><div><label>النوع</label><select data-l="payments" data-i="${i}" data-f="type">${opts(YK.PAY, p.type)}</select></div>
+    <div><label>الاسم اللي يظهر</label><input data-l="payments" data-i="${i}" data-f="title" value="${esc(p.title)}"></div></div>
+    <div class="two"><div><label>${p.type === 'bank' ? 'رقم الحساب / IBAN' : 'الرقم'}</label><input dir="ltr" data-l="payments" data-i="${i}" data-f="number" value="${esc(p.number)}"></div>
+    <div><label>لينك (اختياري)</label><input dir="ltr" data-l="payments" data-i="${i}" data-f="link" value="${esc(p.link)}" placeholder="https://ipn.eg/..."></div></div>
+    <label>سطر صغير تحت الاسم (اختياري)</label><input data-l="payments" data-i="${i}" data-f="note" value="${esc(p.note)}" placeholder="حوّل على الرقم ده"></div>`).join('') || '<p class="hint">مفيش طرق دفع. دوس "ضيف طريقة دفع".</p>';
+  preview();
+}
+function preview() { YK.render({...data, logo: pendingLogo || data.logo}, $('preview')); }
+function changed() { dirty = true; status('فيه تعديلات لسه ما اتحفظتش'); preview(); }
+
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.k) { data[el.dataset.k] = el.value; changed(); }
+  else if (el.dataset.l) { data[el.dataset.l][+el.dataset.i][el.dataset.f] = el.value; changed(); }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.l && el.dataset.f === 'type') {
+    const it = data[el.dataset.l][+el.dataset.i], map = el.dataset.l === 'social' ? YK.SOCIAL : YK.PAY;
+    if (!it.title || Object.values(map).some(v => v.label === it.title)) it.title = map[el.value].label;
+    it.type = el.value; fill(); changed();
+  }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.mv) { const [l, i, d] = b.dataset.mv.split(':'); const a = data[l], j = +i + +d; [a[+i], a[j]] = [a[j], a[+i]]; fill(); changed(); }
+  if (b.dataset.del) { const [l, i] = b.dataset.del.split(':'); const it = data[l][+i]; if (confirmDel(it)) { data[l].splice(+i, 1); fill(); changed(); } }
+});
+function confirmDel(it) { try { return confirm('تمسح "' + (it.title || 'العنصر ده') + '"؟'); } catch (e) { return true; } }
+$('addSocial').onclick = () => { data.social.push({type: 'instagram', title: 'إنستجرام', url: '', sub: ''}); fill(); changed(); };
+$('addPay').onclick = () => { data.payments.push({type: 'vodafone', title: 'فودافون كاش', number: '', link: ''}); fill(); changed(); };
+$('logoDel').onclick = () => { data.logo = ''; pendingLogo = null; fill(); changed(); };
+$('logoFile').onchange = e => {
+  const file = e.target.files[0]; if (!file) return;
+  const img = new Image(); img.onload = () => {
+    const S = 400, c = document.createElement('canvas'); c.width = c.height = S;
+    const m = Math.min(img.width, img.height);
+    c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, S, S);
+    pendingLogo = c.toDataURL('image/jpeg', .86); URL.revokeObjectURL(img.src); fill(); changed();
+  };
+  img.src = URL.createObjectURL(file);
+};
+
+$('saveBtn').onclick = async () => {
+  $('saveBtn').disabled = true; status('جاري الحفظ…');
+  try {
+    if (pendingLogo) {
+      let sha; try { sha = (await gh('logo.jpg')).sha; } catch (e) {}
+      await gh('logo.jpg', {method: 'PUT', body: JSON.stringify({message: 'Update logo from admin', content: pendingLogo.split(',')[1], branch: BRANCH, ...(sha ? {sha} : {})})});
+      data.logo = 'logo.jpg?v=' + Date.now(); pendingLogo = null;
+    }
+    const clean = JSON.parse(JSON.stringify(data));
+    clean.social = clean.social.filter(s => (s.url || '').trim());
+    clean.payments = clean.payments.filter(p => (p.number || '').trim() || (p.link || '').trim());
+    const r = await gh('data.json', {method: 'PUT', body: JSON.stringify({message: 'Update page data from admin', content: textToB64(JSON.stringify(clean, null, 2) + '\n'), sha: dataSha, branch: BRANCH})});
+    dataSha = r.content.sha; data = clean; dirty = false; fill();
+    status('اتحفظ ✓ هيظهر على الصفحة خلال دقيقة أو اتنين', 'ok');
+  } catch (e) {
+    status(e.status === 409 ? 'فيه تعديل تاني اتحفظ قبلك. اعمل refresh وجرب تاني.' : e.status === 401 || e.status === 403 ? 'الـ Token انتهى أو ملوش صلاحية. اخرج وادخل بـ Token جديد.' : 'الحفظ ما نجحش، جرب تاني.', 'bad');
+  }
+  $('saveBtn').disabled = false;
+};
+$('tokSave').onclick = () => { token = $('tok').value.trim(); if (!token) return; try { localStorage.setItem('yk_token', token); } catch (e) {} load(); };
+$('logout').onclick = () => { try { localStorage.removeItem('yk_token'); } catch (e) {} token = ''; showSetup(); };
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+if (token) load(); else showSetup();
+}
+</script>
+</body>
+</html>
